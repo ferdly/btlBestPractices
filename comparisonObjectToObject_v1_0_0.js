@@ -1,106 +1,18 @@
-let preTrash = `
-// responseObject.notes = ['first responseObject note']
-// responseObject.logArray = []
-// let logThis = {}
-// logThis.notes = ['first logThis note']
-// logThis.key = 'sectionCount'
-// logThis.log = '$_{drupalRecord.sectionCount}=>$_{wixRecord.sectionCount}'
-// let testUnit = {}
-// testUnit.notes = ['first testUnit note']
-// testUnit.key = 'sectionCount'
-// testUnit.assert = 'MATCH'
-// testUnit.valueArray = []
-// testUnit.valueArray.push(drupalRecord[unitTest.key])
-// testUnit.valueArray.push(wixRecord[unitTest.key])
-// logThis.testUnit = testUnit
-`;
-let DOX = `
-function compareDrupalWix(drupal,wix){
-	let testCollection = []
-	let testUnitThis = {}
-	testUnitThis.key = 'termId'
-	testUnitThis.assertion = 'MATCH'
-	testCollection.push(testUnitThis)
-	testUnitThis = {}
-	testUnitThis.key = ['courseRegionKey','regionKey']//A,B respectively
-	testUnitThis.assertion = 'MATCH'
-	testCollection.push(testUnitThis)
-
-	//... instantiate element(s)
-	compareTwoObjects(objectA, objectB, testCollection)
-}
-
-function compareTwoObjects(objectA = {}, objectB = {}, testCollection = []){
-	foreach(testCollection){
-		testUnit = testCollection[index]
-		unitTestCompareTwoObjects(objectA,ObjectB,testUnit)
-	}
-}
-
-function unitCompareTwoObjects(objectA = {},ObjectB = {},testUnit = {}){
-    switch (testUnit.assert.toUpperCase()) {
-        case 'MATCH':
-            comparisonMatch(objectA,ObjectB,testUnit)
-            break;
-            
-        default:
-            testUnit.response.passBoolean = false
-            testUnit.response.failString = 'unsupported assertion'
-            testUnit.response.failCode = '!supportedAssertionArray.includes(testUnit.assert)'
-            break;
-    }
-}
-function comparisonMatch(objectA = {},ObjectB = {},testUnit = {}){
-	
-}
-`
-// any variable named `somethingString` CAN be PIPED
-// ↪ `somethingString.split('|')`
-// ↪ if necessary, but default is no pipes
-// ↪ dream up some row structure of the `somethingString` if you like
-// testUnit.code if prefixed with '≈' is 'pseudo-code' not actual code => usefule when too long
-// ø TEST_COLLECTION_displayPrePstWix_CALL
-// displayPrePstWix(wixCoursePRE,wixCoursePST)
-// ø ---
-// displayPrePstDrupal(drupalCoursePRE,drupalCoursePST)
-// displayDrupalWixPre(drupalCoursePRE,wixCoursePRE)
-// ø TEST_COLLECTION_displayDrupalWixPst_CALL
-// displayDrupalWixPst(drupalCoursePST,wixCoursePST)
-// ø ---
-// ! <SUPER IMPORT>
-// import superObject from superObjectPath
-// import superObject from "./2008PRE_superObject.json"
-// pathOLD: /Users/brad/Documents/bradRepositories/vsCode/btlBestPracticesLocal/btlBestPractices/logs/2008PRE_superObject.json
-// pathNEW: /Users/brad/Documents/bradRepositories/vsCode/btlBestPracticesLocal/btlBestPractices/logs/2008PRE_superObject_3607.json
-// import superObject from "./2008PRE_superObject_3607.json"
+// ! <SUPER_OBJECT IMPORT>
 import superObject from "/Users/brad/Documents/bradRepositories/vsCode/btlBestPracticesLocal/btlBestPractices/logs/2008PRE_superObject_3607.json"
 // path: /Users/brad/Documents/bradRepositories/vsCode/btlBestPracticesLocal/btlBestPractices/logs/2008PRE_superObject_3607.json
-// ! </SUPER IMPORT>
-
-//path: /Users/brad/Documents/bradRepositories/vsCode/steamdaWixLocal/steamdaWix/courseCatalog_WiX/courseEnrollmentState/logs/2008PRE_superObject.json
-// import drupalCoursePRE from "./2008PRE_drupalCourse.json";
 let drupalCoursePRE = superObject.drupalPRE
-//path: /Users/brad/Documents/bradRepositories/vsCode/steamdaWixLocal/steamdaWix/courseCatalog_WiX/courseEnrollmentState/logs/2008PRE_drupalCourse.json
-// import wixCoursePRE from "./2008PRE_wixCourse.json";
 let wixCoursePRE = superObject.wixPRE
-//path: /Users/brad/Documents/bradRepositories/vsCode/steamdaWixLocal/steamdaWix/courseCatalog_WiX/courseEnrollmentState/logs/2008PRE_wixCourse.json
-// import drupalCoursePST from "./2008PST_drupalCourse.json";
 let drupalCoursePST = superObject.drupalPST
-//path: /Users/brad/Documents/bradRepositories/vsCode/steamdaWixLocal/steamdaWix/courseCatalog_WiX/courseEnrollmentState/logs/2008PST_drupalCourse.json
-// import wixCoursePST from "./2008PST_wixCourse.json";
 let wixCoursePST = superObject.wixPST
-//path: /Users/brad/Documents/bradRepositories/vsCode/steamdaWixLocal/steamdaWix/courseCatalog_WiX/courseEnrollmentState/logs/2008PST_wixCourse.json
+// ! </SUPER_OBJECT IMPORT>
+// ! <OBJECT_KEYS_OBJECT IMPORT>
 import objectKeysObject from "/Users/brad/Documents/bradRepositories/vsCode/btlBestPracticesLocal/btlBestPractices/logs/2008DEVEL_objectKeysObject.json";
-//pathOLD: /Users/brad/Documents/bradRepositories/vsCode/steamdaWixLocal/steamdaWix/courseCatalog_WiX/courseEnrollmentState/logs/2008DEVEL_objectKeysObject.json
 //pathNEW: /Users/brad/Documents/bradRepositories/vsCode/btlBestPracticesLocal/btlBestPractices/logs/2008DEVEL_objectKeysObject.json
-console.log(`objectKeysObject: [object below]`)
-console.dir(objectKeysObject)
-// console.log(`Object.keys(objectKeysObject): [object below]`)
-// console.dir(Object.keys(objectKeysObject))
-// console.log(`objectKeysObject.wixADJUST: [object below]`)
-// console.dir(objectKeysObject.wixADJUST)
+// ! </OBJECT_KEYS_OBJECT IMPORT>
 
-// ø TEST_COLLECTION_MANUAL_PARAMS
+// ø  <IMPORT-Components Console-Log>
+// ø ø <SUPER_OBJECT>
 // console.warn('drupalCoursePRE: [object below]')
 // console.dir(drupalCoursePRE)
 // console.warn('wixCoursePRE: [object below]')
@@ -109,46 +21,30 @@ console.dir(objectKeysObject)
 // console.dir(drupalCoursePST)
 // console.warn('wixCoursePST: [object below]')
 // console.dir(wixCoursePST)
-// console.warn('objectKeysObject: [object below]')
+// ø ø </SUPER_OBJECT>
+// ø ø <OBJECT_KEYS_OBJECT IMPORT>
+// console.log(`objectKeysObject: [object below]`)
+// ø TEST_COLLECTION_displayDrupalWixPst_FUNCT
 // console.dir(objectKeysObject)
-// console.warn(`objectKeysObject.both: [${objectKeysObject.both}]`)
-// console.warn(`objectKeysObject.wix: [${objectKeysObject.wix}]`)
-// console.warn(`objectKeysObject.drupal: [${objectKeysObject.drupal}]`)
+// console.log(`Object.keys(objectKeysObject): [object below]`)
+// console.dir(Object.keys(objectKeysObject))
+// console.log(`objectKeysObject.wixADJUST: [object below]`)
+// console.dir(objectKeysObject.wixADJUST)
+// ø ø </OBJECT_KEYS_OBJECT IMPORT>
+// ø  </IMPORT-Components Console-Log>
 
-// ø TEST_COLLECTION_displayPrePstWix_FUNCT
-function displayPrePstWix(preWixRecord = {}, pstWixRecord = {}, paramObject = {}) {
-    console.warn('Logic to Robustly Display the progress of the Wix Record PRE-Test to PST-Test')
-    // displayWixRecordData(preWixRecord, '\npreWixRecord\n============')
-    // displayWixRecordData(pstWixRecord, '\npstWixRecord\n============')
-    // console.warn(`\nobjectKeysObject.wix: \n[${objectKeysObject.wix}]`)
-    // console.warn(`\nobjectKeysObject.both: \n[${objectKeysObject.both}]`)
-    // ø TEST_COLLECTION_comparisonWixToWixRecords_CALL
-    let response = comparisonWixToWixRecords(preWixRecord, pstWixRecord, paramObject)
-    // console.warn(`Force return`)
-    // console.warn(`↪from displayPrePstWix`)
-    // return
 
-    // let response = comparisonDrupalToWixRecords(pstDrupalRecord, pstWixRecord)
-    let title = ''
-    let subTitle = ''
-    let report = testCollectionReport(response.testCollection, paramObject.displayParamObject)
-    // console.log(JSON.stringify(response,undefined,4))
-}
-function displayPrePstDrupal(preDrupalRecord = {}, pstDrupalRecord = {}) {
-    console.warn('Logic to Robustly Display the progress of the Drupal Record PRE-Test to PST-Test')
-    displayDrupalRecordData(preDrupalRecord, '\npreDrupalRecord\n===============')
-    displayDrupalRecordData(pstDrupalRecord, '\npstDrupalRecord\n===============')
-    console.warn(`\nobjectKeysObject.drupal: \n[${objectKeysObject.drupal}]`)
-    console.warn(`\nobjectKeysObject.both: \n[${objectKeysObject.both}]`)
-}
-function displayDrupalWixPre(preDrupalRecord = {}, preWixRecord = {}) {
-    console.warn('Logic to Robustly Display the comparison of the PRE-Test state of Drupal Record and the Wix Record')
-    displayDrupalRecordData(preDrupalRecord, '\npreDrupalRecord\n===============')
-    displayWixRecordData(preWixRecord, '\npreWixRecord\n============')
-    console.warn(`\nobjectKeysObject.drupal: \n[${objectKeysObject.drupal}]`)
-    console.warn(`\nobjectKeysObject.wix: \n[${objectKeysObject.wix}]`)
-    console.warn(`\nobjectKeysObject.both: [${objectKeysObject.both}]`)
-}
+
+// ø ==================================================
+// ø ==================================================
+// ø ==================================================
+// ø ==================================================
+// ø ==================================================
+// any variable named `somethingString` CAN be PIPED
+// ↪ `somethingString.split('|')`
+// ↪ if necessary, but default is no pipes
+// ↪ dream up some row structure of the `somethingString` if you like
+// testUnit.code if prefixed with '≈' is 'pseudo-code' not actual code => usefule when too long
 // ø <TESTING>
 let paramObject = {}
 // ø TEST_COLLECTION_MANUAL_PARAMS
@@ -179,7 +75,54 @@ displayPrePstWix(wixCoursePRE,wixCoursePST,paramObject)
 // ø TEST_COLLECTION_AB_MATCH_UNIT
 // ø TEST_COLLECTION_REPORT
 // ø </TESTING>
-// ø TEST_COLLECTION_displayDrupalWixPst_FUNCT
+// ø ==================================================
+// ø ==================================================
+// ø ==================================================
+// ø ==================================================
+// ø ==================================================
+
+
+// ø TEST_COLLECTION_displayPrePstWix_CALL
+// displayPrePstWix(wixCoursePRE,wixCoursePST)
+// ø ---
+// displayPrePstDrupal(drupalCoursePRE,drupalCoursePST)
+// displayDrupalWixPre(drupalCoursePRE,wixCoursePRE)
+// ø TEST_COLLECTION_displayDrupalWixPst_CALL
+// displayDrupalWixPst(drupalCoursePST,wixCoursePST)
+// ø ---
+
+// ø TEST_COLLECTION_MANUAL_PARAMS
+
+// ø TEST_COLLECTION_displayPrePstWix_FUNCT
+function displayPrePstWix(preWixRecord = {}, pstWixRecord = {}, paramObject = {}) {
+    console.warn('Logic to Robustly Display the progress of the Wix Record PRE-Test to PST-Test')
+    // ø TEST_COLLECTION_comparisonWixToWixRecords_CALL
+    let response = comparisonWixToWixRecords(preWixRecord, pstWixRecord, paramObject)
+    // console.warn(`Force return`)
+    // console.warn(`↪from displayPrePstWix`)
+    // return
+
+    // let response = comparisonDrupalToWixRecords(pstDrupalRecord, pstWixRecord)
+    let title = ''
+    let subTitle = ''
+    let report = testCollectionReport(response.testCollection, paramObject.displayParamObject)
+    // console.log(JSON.stringify(response,undefined,4))
+}
+function displayPrePstDrupal(preDrupalRecord = {}, pstDrupalRecord = {}) {
+    console.warn('Logic to Robustly Display the progress of the Drupal Record PRE-Test to PST-Test')
+    displayDrupalRecordData(preDrupalRecord, '\npreDrupalRecord\n===============')
+    displayDrupalRecordData(pstDrupalRecord, '\npstDrupalRecord\n===============')
+    console.warn(`\nobjectKeysObject.drupal: \n[${objectKeysObject.drupal}]`)
+    console.warn(`\nobjectKeysObject.both: \n[${objectKeysObject.both}]`)
+}
+function displayDrupalWixPre(preDrupalRecord = {}, preWixRecord = {}) {
+    console.warn('Logic to Robustly Display the comparison of the PRE-Test state of Drupal Record and the Wix Record')
+    displayDrupalRecordData(preDrupalRecord, '\npreDrupalRecord\n===============')
+    displayWixRecordData(preWixRecord, '\npreWixRecord\n============')
+    console.warn(`\nobjectKeysObject.drupal: \n[${objectKeysObject.drupal}]`)
+    console.warn(`\nobjectKeysObject.wix: \n[${objectKeysObject.wix}]`)
+    console.warn(`\nobjectKeysObject.both: [${objectKeysObject.both}]`)
+}
 function displayDrupalWixPst(pstDrupalRecord = {}, pstWixRecord = {}) {
     console.warn('Logic to Robustly Display the comparison of the PST-Test state of Drupal Record and the Wix Record')
     // displayDrupalRecordData(preDrupalRecord, '\npreDrupalRecord\n===============')
