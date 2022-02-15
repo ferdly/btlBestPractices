@@ -70,7 +70,11 @@ function comparisonMatch(objectA = {},ObjectB = {},testUnit = {}){
 // ! <SUPER IMPORT>
 // import superObject from superObjectPath
 // import superObject from "./2008PRE_superObject.json"
-import superObject from "./2008PRE_superObject_3607.json"
+// pathOLD: /Users/brad/Documents/bradRepositories/vsCode/btlBestPracticesLocal/btlBestPractices/logs/2008PRE_superObject.json
+// pathNEW: /Users/brad/Documents/bradRepositories/vsCode/btlBestPracticesLocal/btlBestPractices/logs/2008PRE_superObject_3607.json
+// import superObject from "./2008PRE_superObject_3607.json"
+import superObject from "/Users/brad/Documents/bradRepositories/vsCode/btlBestPracticesLocal/btlBestPractices/logs/2008PRE_superObject_3607.json"
+// path: /Users/brad/Documents/bradRepositories/vsCode/btlBestPracticesLocal/btlBestPractices/logs/2008PRE_superObject_3607.json
 // ! </SUPER IMPORT>
 
 //path: /Users/brad/Documents/bradRepositories/vsCode/steamdaWixLocal/steamdaWix/courseCatalog_WiX/courseEnrollmentState/logs/2008PRE_superObject.json
@@ -86,10 +90,11 @@ let drupalCoursePST = superObject.drupalPST
 // import wixCoursePST from "./2008PST_wixCourse.json";
 let wixCoursePST = superObject.wixPST
 //path: /Users/brad/Documents/bradRepositories/vsCode/steamdaWixLocal/steamdaWix/courseCatalog_WiX/courseEnrollmentState/logs/2008PST_wixCourse.json
-import objectKeysObject from "./2008DEVEL_objectKeysObject.json";
-//path: /Users/brad/Documents/bradRepositories/vsCode/steamdaWixLocal/steamdaWix/courseCatalog_WiX/courseEnrollmentState/logs/2008DEVEL_objectKeysObject.json
-// console.log(`objectKeysObject: [object below]`)
-// console.dir(objectKeysObject)
+import objectKeysObject from "/Users/brad/Documents/bradRepositories/vsCode/btlBestPracticesLocal/btlBestPractices/logs/2008DEVEL_objectKeysObject.json";
+//pathOLD: /Users/brad/Documents/bradRepositories/vsCode/steamdaWixLocal/steamdaWix/courseCatalog_WiX/courseEnrollmentState/logs/2008DEVEL_objectKeysObject.json
+//pathNEW: /Users/brad/Documents/bradRepositories/vsCode/btlBestPracticesLocal/btlBestPractices/logs/2008DEVEL_objectKeysObject.json
+console.log(`objectKeysObject: [object below]`)
+console.dir(objectKeysObject)
 // console.log(`Object.keys(objectKeysObject): [object below]`)
 // console.dir(Object.keys(objectKeysObject))
 // console.log(`objectKeysObject.wixADJUST: [object below]`)
