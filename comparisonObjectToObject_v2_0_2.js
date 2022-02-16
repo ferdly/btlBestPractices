@@ -79,10 +79,13 @@ let paramObject = {}
 // ø TEST_COLLECTION_AB_COLLECTION_FOREACH => byTestCollectionObjectAObjectB()
 // ø TEST_COLLECTION_AB_UNIT_TO_COLLECTION_ARRAY_APPEND => testCollectionAppend()
 // ø TEST_COLLECTION_AB_UNIT_SWITCH => byTestUnitObjectAObjectB()
+// ø ---
 // ø TEST_COLLECTION_AB_STRING_ECHO_UNIT
 // ø TEST_COLLECTION_AB_MATCH_UNIT
 // ø TEST_COLLECTION_AB_INCREMENT_UNIT
 // ø TEST_COLLECTION_AB_UNSUPPORTED_UNIT
+// ø ---
+// ø TEST_COLLECTION_AB_UNIT_APPLY_REPORT_ROW
 // ø ---
 // ø TEST_COLLECTION_REPORT_COLLECTOR
 // ø TEST_COLLECTION_REPORT_DISPLAY
@@ -350,26 +353,36 @@ function byTestUnitObjectAObjectB(objectA = {}, objectB = {}, testUnit = {}) {
             testUnit.notes.push(`switch (testUnit.assertion.toUpperCase): switch (${testUnit.assertion.toUpperCase()})|case 'MATCH':`)
             // console.warn(`Force return`)
             // return
-            testMatch(objectA, objectB, testUnit, paramObject)
+            testMatch(objectA, objectB, testUnit)
+            break;
+        case 'INCREMENT':
+            testUnit.notes.push(`switch (testUnit.assertion.toUpperCase): switch (${testUnit.assertion.toUpperCase()})|case 'MATCH':`)
+            // console.warn(`Force return`)
+            // return
+            testIncrement(objectA, objectB, testUnit)
             break;
         case 'HEADER':
             testUnit.notes.push(`switch (testUnit.assertion.toUpperCase): switch (${testUnit.assertion.toUpperCase()})|case 'MATCH':`)
             // console.warn(`Force return`)
             // return
-            testStringEcho(objectA, objectB, testUnit, testUnit.assertion.toUpperCase())
+            testStringEcho(objectA, objectB, testUnit)
             break;
         case 'SUBHEADER':
             testUnit.notes.push(`switch (testUnit.assertion.toUpperCase): switch (${testUnit.assertion.toUpperCase()})|case 'MATCH':`)
             // console.warn(`Force return`)
             // return
-            testStringEcho(objectA, objectB, testUnit, testUnit.assertion.toUpperCase())
+            testStringEcho(objectA, objectB, testUnit)
+            break;
+        case 'REPORT':
+            testUnit.notes.push(`switch (testUnit.assertion.toUpperCase): switch (${testUnit.assertion.toUpperCase()})|case 'MATCH':`)
+            // console.warn(`case 'REPORT':`)
+            // console.warn(`Force return`)
+            // return
+            testStringEcho(objectA, objectB, testUnit)
             break;
 
         default:
             testUNSUPPORTED(objectA, objectB, testUnit)
-            // testUnit.response.passBoolean = false
-            // testUnit.response.failString = 'unsupported assertion'
-            // testUnit.response.failCode = `switch (testUnit.assertion)|default:`
             break;
     }
 }
@@ -399,17 +412,22 @@ function testUNSUPPORTED(objectA = {}, objectB = {}, testUnit = {}) {
      * ø NOTES:
      * ø ======
      * ø 🅇 EMPTY OUT
+     * ø 🅇 fix index
+     * ø 🅇 reportString
+     * ø 🅇 reportRow
      */
-     testUnit.assertion = typeof testUnit.assertion === undefined ? 'UNDEFINED' : testUnit.assertion
+    testUnit.assertion = typeof testUnit.assertion === undefined ? 'UNDEFINED' : testUnit.assertion
     testUnit.response = {}
     testUnit.response.passBoolean = false
+    testUnit.response.falseString = 'zFALSE_STRINGz'
     testUnit.response.failString = `Un-Supported`
     testUnit.response.failCode = `switch (${testUnit.assertion.toUpperCase()}) => default:`
     testUnit.response.key = testUnit.key
     testUnit.response.valueString = testUnit.response.failString
-    testUnit.reportLine = `999. ${testUnit.response.key}: ${testUnit.response.valueString}`
-    testUnit.reportRow = `999|${testUnit.response.key}|${testUnit.response.valueString}|`
-    return
+    testUnitApplyRow(testUnit)
+    // testUnit.reportLine = `999. ${testUnit.response.key}: ${testUnit.response.valueString}|`
+    // testUnit.reportRow = `${testUnit.assertion}|999|${testUnit.response.key}|${testUnit.response.valueString}|${testUnit.response.falseString}`
+    // return
 }
 // ø </AB_UnSUPPORTED_UNIT>
 // ø <AB_ECHO_UNIT>
@@ -423,12 +441,16 @@ function testStringEcho(objectA = {}, objectB = {}, testUnit = {}) {
      * ø 🅇 keyis ALWAYS singleton
      * ø 🄾 two values zEQz(=) separated
      * ø 🅇 value EXPECTED to be singleton
+     * ø 🄾 fix index
+     * ø 🅇 reportString
+     * ø 🅇 reportRow
      */
     // console.warn(`§ENTERING testStringEcho(objectA, objectB, testUnit)`)
     let which = testUnit.assertion.toUpperCase()
     const supportedWhichArray = ['HEADER', 'SUBHEADER', 'REPORT']
     if (!supportedWhichArray.includes(which)) {
         testUnit.notes.push(`Unsupported 'which' [${which}]`)
+        testUnitApplyRow(testUnit)
         return
     }
     // console.warn(`Force return`)
@@ -438,12 +460,16 @@ function testStringEcho(objectA = {}, objectB = {}, testUnit = {}) {
     testUnit.notes.push('ENTERING testMatch [of comparisonTest]')
     let testUnitKeyIsValid = typeof testUnit.key === 'object' && Array.isArray(testUnit.key) ? true : false
     testUnitKeyIsValid = typeof testUnit.key === 'string' ? true : testUnitKeyIsValid
+    testUnit.response.falseString = ''
+    testUnit.response.passBoolean = true
     if (!testUnitKeyIsValid) {
         testUnit.response.passBoolean = false
+        testUnit.response.falseString = 'zFALSE_STRINGz'
         testUnit.response.failString = 'testUnit.key is InValid'
         testUnit.response.failCode = `≈ neither array nor string`
         testUnit.response.key = 'UNKNOWN'
         testUnit.response.valueString = testUnit.response.failCode
+        testUnitApplyRow(testUnit)
         return
     }
     let keyA = typeof testUnit.key === 'string' ? testUnit.key : testUnit.key[0]
@@ -452,6 +478,8 @@ function testStringEcho(objectA = {}, objectB = {}, testUnit = {}) {
     testUnit.response.key = typeof testUnit.key === 'string' ? keyA : `${keyA}•${keyB}`
     let valueArray = []
     let valueSingleton = 'NA'
+    testUnit.response.falseString = ''
+    testUnit.response.passBoolean = true
     valueSingleton = typeof objectA[keyA] === 'undefined' ? valueSingleton : objectA[keyA].toString()
     valueSingleton = typeof objectB[keyB] === 'undefined' ? valueSingleton : objectB[keyB].toString()
     testUnit.response.valueString = valueSingleton
@@ -461,10 +489,16 @@ function testStringEcho(objectA = {}, objectB = {}, testUnit = {}) {
     testUnit.notes.push('testUnitKeyIsValid: testUnit.key [array or string]')
     if (valueSingleton === 'NA') {
         testUnit.response.passBoolean = false
+        testUnit.response.falseString = 'zzFALSE_STRINGzz'
         testUnit.response.failString = 'neither value is valid'
         testUnit.response.failCode = `valueSingleton === 'NA'`
+        testUnitApplyRow(testUnit)
         return
     }
+    // let index = 777
+    // testUnit.reportLine = `${index + 1}. ${testUnit.response.key}: ${testUnit.response.valueString} => '${testUnit.response.falseString}'`
+    // testUnit.reportRow = `${testUnit.assertion}|${testUnit.response.key}|${testUnit.response.valueString}|${testUnit.response.falseString}`
+    testUnitApplyRow(testUnit)
     testUnit.notes.push('singletonByEcho')
 }
 // ø </AB_ECHO_UNIT>
@@ -476,7 +510,12 @@ function testMatch(objectA = {}, objectB = {}, testUnit = {}) {
      * ø NOTES:
      * ø ======
      * ø pretty good
+     * ø 🄾 fix No_MATCH
      * ø 🄾 use zEQz(=) for separator (not display anymore, data)
+     * ø 🄾 fix index
+     * ø 🅇 reportString
+     * ø 🅇 reportRow
+
      */
 
     // console.warn(`Force return`)
@@ -486,12 +525,16 @@ function testMatch(objectA = {}, objectB = {}, testUnit = {}) {
     testUnit.notes.push('ENTERING testMatch [of comparisonTest]')
     let testUnitKeyIsValid = typeof testUnit.key === 'object' && Array.isArray(testUnit.key) ? true : false
     testUnitKeyIsValid = typeof testUnit.key === 'string' ? true : testUnitKeyIsValid
+    testUnit.response.falseString = ''
+    testUnit.response.passBoolean = true
     if (!testUnitKeyIsValid) {
         testUnit.response.passBoolean = false
+        testUnit.response.falseString = 'zFALSE_STRINGz'
         testUnit.response.failString = 'testUnit.key is InValid'
         testUnit.response.failCode = `≈ neither array nor string`
         testUnit.response.key = 'UNKNOWN'
         testUnit.response.valueString = testUnit.response.failCode
+        testUnitApplyRow(testUnit)
         return
     }
     let keyA = typeof testUnit.key === 'string' ? testUnit.key : testUnit.key[0]
@@ -503,14 +546,16 @@ function testMatch(objectA = {}, objectB = {}, testUnit = {}) {
     valueArray.push(valueThis)
     valueThis = typeof objectB[keyB] === 'undefined' ? 'NA' : objectB[keyB].toString()
     valueArray.push(valueThis)
-    testUnit.response.valueString = valueArray.join(' ◊ ')
+    testUnit.response.valueString = valueArray.join('=')
     testUnit.notes.push(`valueArray: [${valueArray}]`)
     testUnit.valueArray = valueArray
     testUnit.notes.push('testUnitKeyIsValid: testUnit.key [array or string]')
     if (testUnit.valueArray.length < 2) {
         testUnit.response.passBoolean = false
+        testUnit.response.falseString = 'zFALSE_STRINGz'
         testUnit.response.failString = 'insufficient values to compare'
         testUnit.response.failCode = `testUnit.valueArray.length < 2`
+        testUnitApplyRow(testUnit)
         return
     }
     testUnit.notes.push('testUnit.valueArray => has two or more elements')
@@ -518,11 +563,14 @@ function testMatch(objectA = {}, objectB = {}, testUnit = {}) {
     if (singletonByMatch.length > 1) {
         // if (singletonByMatch.length > 2 || (singletonByMatch.length === 1 && singletonByMatch.includes('NA'))) {
         testUnit.response.passBoolean = false
+        testUnit.response.falseString = 'zFALSE_STRINGz'
         testUnit.response.failString = 'Set from Array of values contains more than one element'
         testUnit.response.failCode = `singletonByMatch.length > 2 || (singletonByMatch.length === 1 && singletonByMatch.includes('NA'))`
+        testUnitApplyRow(testUnit)
         return
     }
-    testUnit.notes.push('singletonByMatch => has exactly one element')
+    let index = 777
+    testUnitApplyRow(testUnit)
 
 }
 // ø </AB_MATCH_UNIT>
@@ -537,6 +585,9 @@ function testIncrement(objectA = {}, objectB = {}, testUnit = {}) {
      * ø 🄾 how increment more than one
      * ø 🄾 increment default = 1
      * ø 🄾 valueA + increment === valueB ELSE passBoolean = false
+     * ø 🄾 fix index
+     * ø 🅇 reportString
+     * ø 🅇 reportRow
      */
 
     // console.warn(`Force return`)
@@ -546,12 +597,16 @@ function testIncrement(objectA = {}, objectB = {}, testUnit = {}) {
     testUnit.notes.push('ENTERING testMatch [of comparisonTest]')
     let testUnitKeyIsValid = typeof testUnit.key === 'object' && Array.isArray(testUnit.key) ? true : false
     testUnitKeyIsValid = typeof testUnit.key === 'string' ? true : testUnitKeyIsValid
+    testUnit.response.falseString = ''
+    testUnit.response.passBoolean = true
     if (!testUnitKeyIsValid) {
         testUnit.response.passBoolean = false
+        testUnit.response.falseString = 'zFALSE_STRINGz'
         testUnit.response.failString = 'testUnit.key is InValid'
         testUnit.response.failCode = `≈ neither array nor string`
         testUnit.response.key = 'UNKNOWN'
         testUnit.response.valueString = testUnit.response.failCode
+        testUnitApplyRow(testUnit)
         return
     }
     let keyA = typeof testUnit.key === 'string' ? testUnit.key : testUnit.key[0]
@@ -563,29 +618,46 @@ function testIncrement(objectA = {}, objectB = {}, testUnit = {}) {
     valueArray.push(valueThis)
     valueThis = typeof objectB[keyB] === 'undefined' ? 'NA' : objectB[keyB].toString()
     valueArray.push(valueThis)
-    testUnit.response.valueString = valueArray.join(' ◊ ')
+    testUnit.response.valueString = valueArray.join('=')
     testUnit.notes.push(`valueArray: [${valueArray}]`)
     testUnit.valueArray = valueArray
     testUnit.notes.push('testUnitKeyIsValid: testUnit.key [array or string]')
     if (testUnit.valueArray.length < 2) {
         testUnit.response.passBoolean = false
+        testUnit.response.falseString = 'zFALSE_STRINGz'
         testUnit.response.failString = 'insufficient values to compare'
         testUnit.response.failCode = `testUnit.valueArray.length < 2`
+        testUnitApplyRow(testUnit)
         return
     }
     testUnit.notes.push('testUnit.valueArray => has two or more elements')
     const singletonByMatch = Array.from(new Set(testUnit.valueArray))
+    testUnit.response.falseString = ''
+    testUnit.response.passBoolean = true
     if (singletonByMatch.length > 1) {
         // if (singletonByMatch.length > 2 || (singletonByMatch.length === 1 && singletonByMatch.includes('NA'))) {
         testUnit.response.passBoolean = false
+        testUnit.response.falseString = 'zFALSE_STRINGz'
         testUnit.response.failString = 'Set from Array of values contains more than one element'
         testUnit.response.failCode = `singletonByMatch.length > 2 || (singletonByMatch.length === 1 && singletonByMatch.includes('NA'))`
+        testUnitApplyRow(testUnit)
         return
     }
-    testUnit.notes.push('singletonByMatch => has exactly one element')
+    testUnitApplyRow(testUnit)
+    // let index = 777
+    // testUnit.reportLine = `${index + 1}. ${testUnit.response.key}: ${testUnit.response.valueString} => '${testUnit.response.falseString}'`
+    // testUnit.reportRow = `${testUnit.assertion}|${index + 1}|${testUnit.response.key}|${testUnit.response.valueString}|${testUnit.response.falseString}`
+    // testUnit.notes.push('singletonByMatch => has exactly one element')
 
 }
 // ø </AB_INCREMENT_UNIT>
+
+// ø TEST_COLLECTION_AB_UNIT_APPLY_REPORT_ROW
+function testUnitApplyRow(testUnit = {}){
+    let index = 777
+    testUnit.reportLine = `${index}. ${testUnit.response.key}: ${testUnit.response.valueString} => '${testUnit.response.falseString}'`
+    testUnit.reportRow = `${testUnit.assertion}|${index}|${testUnit.response.key}|${testUnit.response.valueString}|${testUnit.response.falseString}`
+}
 
 // ø TEST_COLLECTION_REPORT_COLLECTOR
 function testCollectionReportCollector(testCollection = [], displayParamObject = {}) {
@@ -600,12 +672,12 @@ function testCollectionReportCollector(testCollection = [], displayParamObject =
         // console.warn(`${testUnit.response.key}: ${testUnit.response.valueString}`)
         if (testUnit.response.passBoolean) {
             // console.warn(`${index + 1}. ${testUnit.response.key}: ${testUnit.response.valueString}`)
-            testUnit.reportLine = `${index + 1}. ${testUnit.response.key}: ${testUnit.response.valueString}`
-            testUnit.reportRow = `${index + 1}|${testUnit.response.key}|${testUnit.response.valueString}|`
+            // testUnit.reportLine = `${index + 1}. ${testUnit.response.key}: ${testUnit.response.valueString}`
+            // testUnit.reportRow = `${index + 1}|${testUnit.response.key}|${testUnit.response.valueString}|`
         } else {
             // console.warn(`${index + 1}. ${testUnit.response.key}: ${testUnit.response.valueString} => ${displayParamObject.passFalseString}`)
-            testUnit.reportLine = `${index + 1}. ${testUnit.response.key}: ${testUnit.response.valueString} => ${displayParamObject.passFalseString}`
-            testUnit.reportRow = `${index + 1}|${testUnit.response.key}|${testUnit.response.valueString}|${displayParamObject.passFalseString}`
+            // testUnit.reportLine = `${index + 1}. ${testUnit.response.key}: ${testUnit.response.valueString} => ${displayParamObject.passFalseString}`
+            // testUnit.reportRow = `${index + 1}|${testUnit.response.key}|${testUnit.response.valueString}|${displayParamObject.passFalseString}`
         }
 
     }
@@ -622,11 +694,7 @@ function testCollectionReportDisplay(testCollection = [], displayParamObject = {
             delete element.notes
         });
     }
-    console.warn(JSON.stringify(testCollection))
-    console.warn(`Force return`)
-    console.warn(`↪from testCollectionReportDisplay`)
-    return
-
+    
     let superIndex = 0
     let displayIndex = 0
     const alphaFiftyTwoArrayPipedString = 'ø,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,aa,ab,ac,ad,ae,af,ag,ah,ai,aj,al,ak,al,am,an,ao,ap,aq,ar,as,at,au,av,aw,ax,ay,az'
@@ -660,6 +728,15 @@ function testCollectionReportDisplay(testCollection = [], displayParamObject = {
     let matchBlockCardinal = 1
     let reportBlockCardinal = 1
     let footerBlockCardinal = 1
+    testCollection.forEach(element => {
+        // console.warn('=> ' + element.reportLine + '<=')
+        console.warn(element.reportRow)
+    });
+    // console.warn(JSON.stringify(testCollection))
+    console.warn(`Force return`)
+    console.warn(`↪from testCollectionReportDisplay`)
+    return
+
 
     console.warn(`\n\nHEADER:pending\n======`)
     console.warn(`\nSUB-HEADER:pending\n======`)
