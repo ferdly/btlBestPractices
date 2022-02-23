@@ -398,6 +398,9 @@ async function comparisonWixToWixRecords(wixRecordA = {}, wixRecordB = {}, param
     // ø PREFS_FOR_WIX_WIX_MAIN ¡CALL!
     paramObject.displayParamObject.paddingAppicableForAssertionArray = ['COLUMNHEADER', 'MATCH', 'INCREMENT']
     paramObject.displayParamObject.columnAlignmentArray = ['RIGHT', 'RIGHT', 'LEFT', 'LEFT']
+    for (const paddingAssertion of paramObject.displayParamObject.paddingAppicableForAssertionArray) {
+        paramObject.displayParamObject[paddingAssertion].columnAlignmentArray = paramObject.displayParamObject.columnAlignmentArray
+    }
     // ø </ASSIGN PREFERENCES [paramObject Elements]>
     // ø --
     // ø </THIS COMPARISON>
@@ -1034,6 +1037,11 @@ async function testCollectionReportRowPrep(testCollection = [], displayParamObje
 // ø TEST_COLLECTION_REPORT_STRING_PREP [for...of] testUnit.reportStringDisplay [DATA]
 async function testCollectionReportStringPrep(testCollection = [], displayParamObject = {}) {
     let maxColCount = 0
+    let columnHeaderIndex = 7777777
+    let prepenColumnHeaderIndex = 7777777
+    let prepenColumnHeaderIndexPAR = `NO|PREPEND_COLUMNHEADER|7777777`
+    let prepenColumnHeaderArray = []
+    let doDisplayPrependColumnHeader = true
     console.warn(`≈<Z1042>≈ testCollectionReportStringPrep <≈ZZZ≈ForEach => composeReportStringDisplay()>`)
     for (let index = 0; index < testCollection.length; index++) {
         const element = testCollection[index];
@@ -1043,7 +1051,63 @@ async function testCollectionReportStringPrep(testCollection = [], displayParamO
         await composeCardinalityString(element, displayParamObject)
         // console.warn(`≈1038≈ testCollectionReportStringPrep </≈1568≈ForEach => composeCardinalityString()>`)
         // ø TEST_COLLECTION_REPORT_STRING_DISPLAY [singleton] testUnit.reportStringDisplay [DATA] ¡CALL!
-        await composeReportStringDisplay(element, displayParamObject)
+        if(element.assertion === 'COLUMNHEADER'){
+            columnHeaderIndex = index
+        }
+        prepenColumnHeaderIndexPAR = await composeReportStringDisplay(element, displayParamObject, columnHeaderIndex)
+        prepenColumnHeaderArray = prepenColumnHeaderIndexPAR.split('|')
+        // if(prepenColumnHeaderArray[0] === 'YES' && doDisplayPrependColumnHeader === true){
+        //     doDisplayPrependColumnHeader = false
+        //     prepenColumnHeaderIndex = prepenColumnHeaderArray[2]
+        //     console.warn(`≈Z1058≈ Prepend COLUMN_HEADER:  testCollection[${prepenColumnHeaderArray[2]}]`)
+        // }
+
+        
+        // let keyShowArray = []
+        // let lineObject = {}
+        // lineObject.logLine = '≈1538≈'
+        // lineObject.logScriptName = 'composeReportStringDisplay'
+        // lineObject.logLoopLine = ''//'≈455≈'
+        // lineObject.logLoopScirptName = ''//'testCollection'
+        // logTestUnit(element, displayParamObject, keyShowArray, lineObject)
+
+        if(element.key === 'waitList'){
+            console.warn(`<≈Z1060≈> element: [element.key: ${element.key}]`)
+            console.warn(`element.assertion: ${element.assertion}`)
+            console.warn(`element.assertionCardinal: ${element.assertionCardinal}`)
+            console.warn(`element.reportCardinalString: '${element.reportCardinalString}'`)
+            console.warn(`element.reportCardinalStringNOTE: '${element.reportCardinalStringNOTE}'`)
+            console.warn(`element.reportRow: '${element.reportRow}'`)
+            console.warn(`element.reportStringDisplay: '${element.reportStringDisplay}'`)
+            console.warn(`element.reportStringColCount: '${element.reportStringColCount}'`)
+            console.warn(`</≈Z1060≈> element: [element.key: ${element.key}]`)
+            console.dir(element)
+            console.warn(`≈Z1062≈ displayParamObject: [just waitList => 'INCREMET']`)
+            console.dir(displayParamObject)
+            console.dir(displayParamObject.INCREMENT.columnAlignmentArray)
+            // console.dir(displayParamObject.maxColPaddingArray)// = maxColPaddingArray)
+            // console.dir(displayParamObject.minColPaddingExtraArray)// = minColPaddingExtraArray
+            // console.dir(displayParamObject.columnAlignmentArray)// = columnAlignmentArray
+        }
+        if(element.key === 'Attribute'){
+            console.warn(`<≈Z1078≈> element: [element.key: ${element.key}]`)
+            console.warn(`element.assertion: ${element.assertion}`)
+            console.warn(`element.assertionCardinal: ${element.assertionCardinal}`)
+            console.warn(`element.reportCardinalString: '${element.reportCardinalString}'`)
+            console.warn(`element.reportCardinalStringNOTE: '${element.reportCardinalStringNOTE}'`)
+            console.warn(`element.reportRow: '${element.reportRow}'`)
+            console.warn(`element.reportStringDisplay: '${element.reportStringDisplay}'`)
+            console.warn(`element.reportStringColCount: '${element.reportStringColCount}'`)
+            console.warn(`</≈Z1060≈> element: [element.key: ${element.key}]`)
+            console.dir(element)
+            console.warn(`≈Z1062≈ displayParamObject: [just waitList => 'INCREMET']`)
+            console.dir(displayParamObject)
+            console.dir(displayParamObject.INCREMENT.columnAlignmentArray)
+            // console.dir(displayParamObject.maxColPaddingArray)// = maxColPaddingArray)
+            // console.dir(displayParamObject.minColPaddingExtraArray)// = minColPaddingExtraArray
+            // console.dir(displayParamObject.columnAlignmentArray)// = columnAlignmentArray
+        }
+
         maxColCount = maxColCount > element.reportStringColCount ? maxColCount : element.reportStringColCount
         displayParamObject.maxColCount = maxColCount
         let keyShowArray = []
@@ -1054,6 +1118,9 @@ async function testCollectionReportStringPrep(testCollection = [], displayParamO
         lineObject.logLoopScirptName = ''//'testCollection'
         logTestUnit(element, displayParamObject, keyShowArray, lineObject)
     }
+    // if(doDisplayPrependColumnHeader === false){
+    //     console.warn(`≈1120≈ ${prepenColumnHeaderIndex}`)
+    // }
     console.warn(`≈</Z1042>≈ testCollectionReportStringPrep </≈ZZZ≈ForEach => composeReportStringDisplay()>`)
 }
 
@@ -1083,6 +1150,14 @@ async function testCollectionReportPaddingPrep(testCollection = [], displayParam
     displayParamObject.columnAlignmentArray = columnAlignmentArray
     /*
     */
+    console.warn(`≈Z1117≈ displayParamObject. [testCollectionReportPaddingPrep]`)
+    console.warn(`≈Z1118≈ displayParamObject.maxColPaddingArray [array below]`)
+    console.dir(displayParamObject.maxColPaddingArray)// = maxColPaddingArray)
+    console.warn(`≈Z1120≈ displayParamObject.minColPaddingExtraArray [array below]`)
+    console.dir(displayParamObject.minColPaddingExtraArray)// = minColPaddingExtraArray
+    console.warn(`≈Z1122≈ displayParamObject.columnAlignmentArray [array below]`)
+    console.dir(displayParamObject.columnAlignmentArray)// = columnAlignmentArray
+
 }
 
 // ø TEST_COLLECTION_REPORT_PADDED_STRING [for...of] testUnit.paddedString [STRING]
@@ -1229,25 +1304,25 @@ async function testCollectionReportDisplay(testCollection = [], displayParamObje
         // if (element.assertion === 'HEADER') { headerBlock += composeReportRowDisplay(element) + '\n' }
         if (element.assertion === 'HEADER') { headerBlock += deliverRowByMechanism(element, 'PARAM-OBJECT-PENDING') + '\n' }
 
-        // if(element.assertion === 'SUBHEADER'){subHeaderBlock += composeReportStringDisplay(element) + '; '}
+        // if(element.assertion === 'SUBHEADER'){subHeaderBlock += cZomposeReportStringDisplay(element) + '; '}
         // if (element.assertion === 'SUBHEADER') { subHeaderBlock += composeReportRowDisplay(element) + '' }
         if (element.assertion === 'SUBHEADER') { subHeaderBlock += deliverRowByMechanism(element, 'PARAM-OBJECT-PENDING') + '' }
 
         if (element.assertion === 'COLUMNHEADER') { columnHeaderBlock += deliverRowByMechanism(element, 'PARAM-OBJECT-PENDING') + '' }
 
-        // if(element.assertion === 'INCREMENT'){incrementBlock += composeReportStringDisplay(element) + '\n'}
+        // if(element.assertion === 'INCREMENT'){incrementBlock += cZomposeReportStringDisplay(element) + '\n'}
         if (element.assertion === 'INCREMENT') { incrementBlock += deliverRowByMechanism(element, 'PARAM-OBJECT-PENDING') + '\n' }
 
         // let incrementBlock = ''
-        // if (element.assertion === 'MATCH') { matchBlock += composeReportStringDisplay(element) + '\n'}
+        // if (element.assertion === 'MATCH') { matchBlock += cZomposeReportStringDisplay(element) + '\n'}
         if (element.assertion === 'MATCH') { matchBlock += deliverRowByMechanism(element, 'PARAM-OBJECT-PENDING') + '\n' }
 
         // let matchBlock = ''
-        // if(element.assertion === 'REPORT'){reportBlock += composeReportStringDisplay(element) + '\n'}
+        // if(element.assertion === 'REPORT'){reportBlock += cZomposeReportStringDisplay(element) + '\n'}
         if (element.assertion === 'REPORT') { reportBlock += deliverRowByMechanism(element, 'PARAM-OBJECT-PENDING') + '\n' }
 
         // let reportBlock = ''
-        // if(element.assertion === 'FOOTER'){footerBlock += composeReportStringDisplay(element) + '\n'}
+        // if(element.assertion === 'FOOTER'){footerBlock += cZomposeReportStringDisplay(element) + '\n'}
         if (element.assertion === 'FOOTER') { footerBlock += composeReportRowDisplay(element) + '\n' }
 
         // let footerBlock = ''
@@ -1297,6 +1372,9 @@ async function testCollectionReportDisplay(testCollection = [], displayParamObje
     // headerBufferThis = matchBlock.length ? ('Match: ' + columnHeaderBuffer).substr(0, columnHeaderBuffer.length) + '\n' : ''
     // matchBlock = headerBufferThis+ matchBlock
     console.warn(`<---------- <paddedString Report> ---------->`)
+    console.warn(`<---------- <> ---------->`)
+    console.warn(`<----- <> ----->`)
+    console.warn(`< <> >`)
     // console.warn(`titleBlock: ≈1142≈ [below]`)
     console.warn(titleBlock)
     // console.warn(`headerBlock: ≈1142≈ [below]`)
@@ -1317,7 +1395,11 @@ async function testCollectionReportDisplay(testCollection = [], displayParamObje
     // console.warn(`footerBlock: ≈1152≈ [below]`)
     console.warn(columnHeaderBuffer)
     console.warn(footerBlock)
+    console.warn(`< </> >`)
+    console.warn(`<----- </> ----->`)
+    console.warn(`<---------- </> ---------->`)
     console.warn(`<---------- </paddedString Report> ---------->`)
+
     console.warn(`Force return: ≈1152≈ from 'testCollectionReportDisplay'`)
     console.warn(`(subsetDisplay @ ≈484≈)`)
     console.warn(`(paddedStringArray @ ≈501≈)`)
@@ -1492,20 +1574,35 @@ function composeReportRowDisplay(element = {}) {
 
 // ø TEST_COLLECTION_REPORT_COMPOSE_CARNDINALITY_STRING [singleton] testUnit.reportCardinalString [DATA]
 function composeCardinalityString(element = {}, displayParamObject = {}) {
-    // if (displayParamObject.develLogKeyArray.includes(element.key)) {
-        // console.warn(`≈Z1444≈0ZZa≈!≈ composeCardinalityString(); key: ${element.key}`)
-        // let trimmedElement = JSON.parse(JSON.stringify(element))
-        // delete trimmedElement.notes
-        // delete trimmedElement.response
-        // delete trimmedElement.keyCountA
-        // delete trimmedElement.keyCountB
-        // delete trimmedElement.valueArray
-        // delete trimmedElement.reportLine
-        // console.warn(`<---------- ZtrimmedElement ---------->`)
-        // console.dir(trimmedElement)
-        // console.warn(`<---------- element ---------->`)
-        // console.dir(element)
-    // }
+    displayParamObject.SUBHEADER.cardinalityType = 'NONE'
+    displayParamObject.COLUMNHEADER.cardinalityType = 'NONE'
+    displayParamObject.INCREMENT.cardinalityType = '123'
+    // displayParamObject.INCREMENT.cardinalityType = 'NONE'
+    displayParamObject.MATCH.cardinalityType = '123'
+    // displayParamObject.MATCH.cardinalityType = 'NONE'
+    displayParamObject.REPORT.cardinalityType = '123'
+    // displayParamObject.REPORT.cardinalityType = 'NONE'
+    displayParamObject.FOOTER.cardinalityType = 'NONE'
+    if(element.assertion === 'COLUMNHEADER'){
+        // console.warn(`≈Z1496≈ displayParamObject: [for devel override locally]`)
+        // console.dir(displayParamObject)
+        let keyShowArray = []
+        // animals.push('chickens', 'cats', 'dogs');
+        keyShowArray.push('supportedCardinalityTypeArray','defaultCardinalityType')
+        keyShowArray.push('supportedCardinalityPunctArray','defaultCardinalityPunct')
+        keyShowArray.push('supportedCardinalityAlignArray','defaultCardinalityAlign')
+        keyShowArray.push('HEADER','COLUMNHEADER','SUBHEADER','INCREMENT','MATCH','FOOTER')
+        let trimmedElement = JSON.parse(JSON.stringify(displayParamObject))
+        let keyArray = Object.keys(trimmedElement)
+        console.warn(`≈Z1501≈ keyArray: [${keyArray}]`)
+        for (const key of keyArray) {
+            if(!keyShowArray.includes(key)){
+                delete trimmedElement[key]            
+            }
+        }
+        console.warn(`<---------- trimmedElement ---------->`)
+        console.dir(trimmedElement)
+    }
     // ø --
     // ø --
     // element.reportCardinalString = ''
@@ -1543,15 +1640,18 @@ function composeCardinalityString(element = {}, displayParamObject = {}) {
     // ø --
     // return
     // ø --
+    let elementCardinalityType = displayParamObject[element.assertion].cardinalityType
+    // console.warn(`≈Z1558≈ elementCardinalityType: ${elementCardinalityType}`)
     // ø --
-    switch (PARAMCardinalityType) {
+    switch (elementCardinalityType) {
         case '123':
             prependCardinalityItem = element.assertionCardinal + PARAMCardinalityPunct + '|'
             //paramObject.displayParamObject.columnAlignmentArray
             element.reportCardinalString = prependCardinalityItem
             element.reportCardinalStringNOTE = element.assertionCardinal + '|' + PARAMCardinalityType + '|' + PARAMCardinalityPunct + '|'
+            // displayParamObject.columnAlignmentArray.unshift('LEFT')
             break;
-            case 'NONE':
+        case 'NONE':
             prependCardinalityItem = ''
             element.reportCardinalString = prependCardinalityItem
             element.reportCardinalStringNOTE = element.assertionCardinal + '|' + PARAMCardinalityType
@@ -1603,75 +1703,93 @@ function composeCardinalityString(element = {}, displayParamObject = {}) {
 }
 // ø TEST_COLLECTION_REPORT_STRING_DISPLAY [singleton] testUnit.reportStringDisplay [DATA]
 
-function composeReportStringDisplay(element = {}, displayParamObject = {}) {
+function composeReportStringDisplay(element = {}, displayParamObject = {}, columnHeaderIndex = 777) {
     // console.warn(`≈1187≈§≈ paramObject: [object below]`)
-    if (displayParamObject.develLogKeyArray.includes(element.key)) {
-        console.warn(`≈Z1538≈0ZZZ≈ composeReportStringDisplay(): key: ${element.key}`)
-        let trimmedElement = JSON.parse(JSON.stringify(element))
-        delete trimmedElement.notes
-        delete trimmedElement.response
-        delete trimmedElement.keyCountA
-        delete trimmedElement.keyCountB
-        delete trimmedElement.valueArray
-        delete trimmedElement.reportLine
-        delete trimmedElement.reportRow
-        delete trimmedElement.reportRowDisplay
-        // console.warn(`<---------- ZtrimmedElement ---------->`)
-        // console.dir(trimmedElement)
-        // console.warn(`<---------- element ---------->`)
-        // console.dir(element)
-}
+    
     // console.dir(paramObject)
     // console.warn(`≈1189≈§≈ paramObject.displayParamObject.columnMaxLengthArray: [array below]`)
     // console.dir(paramObject.displayParamObject.columnMaxLengthArray)
-
+    
 
 
     let reportRowDisplayArray = element.reportRowDisplay.split('|')
+    let incColIndex = element.reportCardinalString ? 1 : 0
+    let prepenColumnHeaderIndex = `NO|PREPEND_COLUMNHEADER|777`
+    if(incColIndex === 1 && columnHeaderIndex < 777){
+        console.warn(`≈Z1704≈ PREPEND COLUMNHEADER-row[${columnHeaderIndex} by Cardinality-Column]`)
+        prepenColumnHeaderIndex = `YES|PREPEND_COLUMNHEADER|${columnHeaderIndex}`
+    }
+    let indexArray = [0,1,2,3,4,5,6,7,8,9]
+    for (let  indexElement of indexArray) {
+        indexArray[indexElement] += incColIndex
+    }
+    if(element.key === 'waitList'){
+        console.warn(`≈Z1686≈ element.reportRowDisplay: '${element.reportRowDisplay}'`)
+        console.warn(`≈Z1687≈ reportRowDisplayArray: [${reportRowDisplayArray}]`)
+        console.warn(`≈Z1688≈ indexArray: [${indexArray}]`)
+    }
     let eqBuffer = '===================================================================================================='
     if (element.assertion === 'HEADER') {
         // element.reportStringDisplay = `${eqBuffer.substr(0,reportRowDisplayArray[0].length + 10)}\n==== ${reportRowDisplayArray[0]} ====\n${eqBuffer.substr(0,reportRowDisplayArray[0].length + 10)}`
         element.reportStringDisplay = `${reportRowDisplayArray[0]}`
         element.reportStringColCount = 1
 
-        return
+        return prepenColumnHeaderIndex
     }
     if (element.assertion === 'SUBHEADER') {
         element.reportStringDisplay = `${reportRowDisplayArray[0]}: ${reportRowDisplayArray[1]}; `
         element.reportStringColCount = 2
-        return
+        return prepenColumnHeaderIndex
     }
     if (element.assertion === 'COLUMNHEADER') {
         // element.reportStringDisplay = `${reportRowDisplayArray[0]}: ${reportRowDisplayArray[1]}; ` 
         let values = reportRowDisplayArray[1].split('=')
         element.reportStringDisplay = `${reportRowDisplayArray[0]}|${values[0]}|${values[1]}|${reportRowDisplayArray[2]}`
         element.reportStringColCount = 4
-        return
+        return prepenColumnHeaderIndex
     }
     if (element.assertion === 'MATCH') {
-        let values = reportRowDisplayArray[1].split('=')
-        if (reportRowDisplayArray[2] === 'EMPTY_OBJECT') {
-            element.reportStringDisplay = `${reportRowDisplayArray[0]}|${values[0]}|${values[1]}|`
+        let values = reportRowDisplayArray[indexArray[1]].split('=')
+        if (reportRowDisplayArray[indexArray[2]] === 'EMPTY_OBJECT') {
+            element.reportStringDisplay = `${reportRowDisplayArray[indexArray[0]]}|${values[0]}|${values[1]}|`
             element.reportStringColCount = 4
-            return
         }
-        element.reportStringDisplay = `${reportRowDisplayArray[0]}|${values[0]}|${values[1]}|${reportRowDisplayArray[2]}`
-        element.reportStringColCount = 4
-        return
+        if (reportRowDisplayArray[indexArray[2]] !== 'EMPTY_OBJECT') {
+            element.reportStringDisplay = `${reportRowDisplayArray[indexArray[0]]}|${values[0]}|${values[1]}|${reportRowDisplayArray[indexArray[2]]}`
+            element.reportStringColCount = 4
+        }
+        if(element.reportCardinalString){
+            element.reportStringDisplay = `${element.reportCardinalString}${element.reportStringDisplay}`
+            element.reportStringColCount++
+            if(element.reportStringColCount > displayParamObject.INCREMENT.columnAlignmentArray.length){
+                displayParamObject.INCREMENT.columnAlignmentArray.unshift('LEFT')
+            }
+        }
+        return prepenColumnHeaderIndex
     }
     if (element.assertion === 'INCREMENT') {
-        let values = reportRowDisplayArray[1].split('=')
-        if (reportRowDisplayArray[2] === 'EMPTY_OBJECT') {
-            element.reportStringDisplay = `${reportRowDisplayArray[0]}|${values[0]}|${values[1]}|`
+        let values = reportRowDisplayArray[indexArray[1]].split('=')
+        console.warn(`≈Z1724≈ values[]`)
+        if (reportRowDisplayArray[indexArray[2]] === 'EMPTY_OBJECT') {
+            element.reportStringDisplay = `${reportRowDisplayArray[indexArray[0]]}|${values[0]}|${values[1]}|`
             element.reportStringColCount = 4
-            return
         }
-        element.reportStringDisplay = `${reportRowDisplayArray[0]}|${values[0]}|${values[1]}|reportRowDisplayArray[2]`
-        element.reportStringColCount = 4
-        return
+        if (reportRowDisplayArray[indexArray[2]] !== 'EMPTY_OBJECT') {
+            element.reportStringDisplay = `${reportRowDisplayArray[indexArray[0]]}|${values[0]}|${values[1]}|${reportRowDisplayArray[indexArray[2]]}`
+            element.reportStringColCount = 4
+        }
+        if(element.reportCardinalString){
+            element.reportStringDisplay = `${element.reportCardinalString}${element.reportStringDisplay}`
+            element.reportStringColCount++
+            if(element.reportStringColCount > displayParamObject.INCREMENT.columnAlignmentArray.length){
+                displayParamObject.INCREMENT.columnAlignmentArray.unshift('LEFT')
+            }
+        }
+        return prepenColumnHeaderIndex
     }
     element.reportStringDisplay = `${element.reportRowDisplay}|REPORT_STRING_DISPLAY_UNSUPPORTED`
     element.reportStringColCount = 9
+    return prepenColumnHeaderIndex
 }
 // ø ========== <DEVEL_AREA> ==========
 async function logTestUnit(testUnit = {}, displayParamObject = {}, keyShowArray = [], lineObject = {}){
@@ -1701,9 +1819,11 @@ async function logTestUnit(testUnit = {}, displayParamObject = {}, keyShowArray 
         // keyShowArray.push('reportLine')
         // keyShowArray.push('reportRow')
         // keyShowArray.push('reportRowDisplay')
-        // keyShowArray.push('reportCardinalString')
-        // keyShowArray.push('reportCardinalStringNOTE')
+        keyShowArray.push('reportCardinalString')
+        keyShowArray.push('reportCardinalStringNOTE')
+        keyShowArray.push('reportStringDisplay')
         // console.warn(`keyShowArray: [${keyShowArray}]`)
+        //
         // ø </devel>
         if(lineObject.logLine && lineObject.logScriptName && lineObject.logLoopLine && lineObject.logLoopScirptName){
             console.warn(`≈${lineObject.logLoopLine}≈ ${lineObject.logLoopScirptName} <≈${lineObject.logLine}≈ForEach => ${lineObject.logScriptName}()>`)
