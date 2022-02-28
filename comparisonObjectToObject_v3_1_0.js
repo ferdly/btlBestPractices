@@ -23,7 +23,13 @@ import { wrapRowToArray } from '/Users/brad/Documents/bradRepositories/vsCode/ut
 
 // • </CODE IMPORT>
 // ! <SUPER_OBJECT IMPORT>
-import superObject from "/Users/brad/Documents/bradRepositories/vsCode/btlBestPracticesLocal/btlBestPractices/logs/2008PRE_superObject_3607.json"
+let importNid = 3607
+let importPath = `/Users/brad/Documents/bradRepositories/vsCode/btlBestPracticesLocal/btlBestPractices/logs/2008PRE_superObject_${importNid}.json`
+// import superObject from "/Users/brad/Documents/bradRepositories/vsCode/btlBestPracticesLocal/btlBestPractices/logs/2008PRE_superObject_3607.json"
+import superObject from "nid3607/test01.js"
+// import superObject from "@nid3607/test01.js"
+// import superObject from eval(importPath)
+// path: /Users/brad/Documents/bradRepositories/vsCode/tests/superObject/nid3607/test01.json
 // path: /Users/brad/Documents/bradRepositories/vsCode/btlBestPracticesLocal/btlBestPractices/logs/2008PRE_superObject_3607.json
 let drupalCoursePRE = superObject.drupalPRE
 let wixCoursePRE = superObject.wixPRE

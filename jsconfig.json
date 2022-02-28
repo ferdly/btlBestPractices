@@ -1,0 +1,8 @@
+{
+    "compilerOptions": {
+      "baseUrl": "./",
+      "paths": {
+        "nid3607/*": ["../../tests/superObject/nid3607/*"]
+      }
+    }
+  }
