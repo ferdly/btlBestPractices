@@ -1,0 +1,98 @@
+---
+# yaml as the brain storms
+basePrimaryKey (in wix Collections it is the manadatory _id, in drupal it is nid and so on)
+acquiredPrimaryKey (acquired, explicit, declared?)
+implicitPrimarykey (implicit, intrinsic, natural):
+  examples:
+    - drivers license
+    - cell phone (for most of us)
+    - email (for most of us)
+    - SS# (although they are reused)
+functionalCompositeKey:
+  examples:
+    - drivers license && state (not sure if state is necessary, but maybe)
+filename: 
+  - itself something that follows a pattern that can be tested
+  - below underscores are separated by carets (^) for clarity
+pattern: 
+  examples:
+
+    - TASK_^_WIX_^_getAll_insertTask_deleteTask_updateTask
+    - TASK_^_WIX_^_taskDataJSW:
+      - ¡using the backend module name - but that needs a pattern!
+...
+---
+Notes:
+  - as a separate imported JSON file
+  - used as basis for Blunt Data Comparison Testing:
+    - insertThrottle
+    - deleteThrottle (often zero)
+    - for basePrimaryKey if it exists but is extremely developer esoteric, don't include:
+      - example: record id in FileMaker
+  - these function attributes capitalized?: SELECT/INSERT..., FROM, WHERE, ORDERBY, AS, HAVING (and so on)
+...
+---
+# yaml close to JSON with examples
+config:
+  source:
+    name: the source filename
+    kind: wixCollection, drupalContentType, drupalViewRestExport, quickBooksAPI
+    fullPath: the full path no matter what
+    codePath: the path used in code
+      notes: 
+        - NOT relative, could be but not necessarily
+        - COULD BE identical to fullPath
+    codePathDescr: ala the Notes => "always the same as fullPath", "must contextual filter" etc.
+  attributes: an array of attributes
+  count: (upone last exception report)
+  throttle: 
+    insert: (no exception if this many => often adjusted as business grows)
+    delete: (no exception if this many => often zero)
+  testQuery: the query against which the above config's exception report is based
+  testQueryNotes:
+    - first note
+    targetObjectArray:
+      - target:
+          kind: repeater,table,form
+          attributeObjectarray: array of objects where the key is the attribute from source
+            key: the key (same as the key of the object)
+            unCameledKey: the key with the UnCamel function applied (default for as)
+            as: from SQL the renaming of an attribute for a Form or a Table Column or whatever
+              notes;
+                - can be overridden esoterically ('nameLastFirst' for a Form perhaps, 'Name' for a Table perhaps) 
+  functionObjectarray:
+    function:
+      name: getAllTasks
+      descr: get all the tasks for the repeater by visitorId
+      pseudoCode: get all tasks where visitor matches
+      callAwait: true
+      exported: false
+      action: (verb?, "topLevelOperation"?) INSERT
+      from: often identical throughout, but WYAYMAAOOYAM
+      where: query parameters
+      whereHuman: example => 'All tasks that haven't been completed yet'
+      orderBy: isPast, date, time
+      orderByHuman: 'all events by date then time, with all PAST events at the bottom'
+      handlers: not sure what this means at this time, but I'm heading in this direction
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+...
